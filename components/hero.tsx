@@ -1,4 +1,4 @@
-import { GithubIcon, MailIcon, MapPin, PinIcon } from "lucide-react";
+import { GithubIcon, MailIcon, MapPin } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
