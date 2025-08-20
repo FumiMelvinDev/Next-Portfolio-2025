@@ -30,7 +30,7 @@ export default async function Project({
   const { title, image, author, publishedAt } = metadata;
 
   return (
-    <section className="pb-24 pt-32">
+    <section className="pt-6">
       <div className="container max-w-3xl">
         <Link
           href="/projects"
