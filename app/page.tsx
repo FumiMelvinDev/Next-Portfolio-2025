@@ -2,6 +2,7 @@ import About from "@/components/about";
 import Header from "@/components/header";
 import Hero from "@/components/hero";
 import Projects from "@/components/projects";
+import RecentProjects from "@/components/recent-projects";
 import Skills from "@/components/skills";
 
 export default function Home() {
@@ -12,7 +13,7 @@ export default function Home() {
         <Hero />
         <About />
         <Skills />
-        <Projects />
+        <RecentProjects />
       </div>
     </main>
   );

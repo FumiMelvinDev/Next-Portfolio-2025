@@ -1,63 +1,46 @@
+import Image from "next/image";
 import Link from "next/link";
-import React from "react";
 
-type Project = {
-  title: string;
-  description: string;
-  github: string;
-  url?: string;
-};
+import { ProjectMetadata } from "@/lib/projects";
+import { formatDate } from "@/lib/utils";
 
-const projectslist: Project[] = [
-  {
-    title: "Nextjs AI Notes App",
-    description:
-      "Nextjs notes taking app powered by Google Gemini and supabase, which helps you search for information related to your notes.",
-    github: "https://github.com/FumiMelvinDev/NextJs_AI_NotesApp",
-    url: "https://next-js-ai-notes-app-zejl-zeta.vercel.app/",
-  },
-  {
-    title: "Flutter Quotes Generator",
-    description:
-      "An amazing Flutter quote generator with the abality to share quotes directly to social media platforms.",
-    github: " https://github.com/FumiMelvinDev/flutter_quotes_app",
-  },
-  {
-    title: "Flutter AI Notes App",
-    description:
-      "Flutter notes taking app powered by Google Gemini and supabase, which helps you search for information related to your notes. This is my favourite project because it helped me realized that with a proper blueprint I can make anything.",
-    github: "https://github.com/FumiMelvinDev/Flutter-AI-Notes-App",
-  },
-  {
-    title: " Flutter Currency Converter",
-    description:
-      "Android Currency Converter using Flutter. Real-time Exchange Rates: Access live exchange rates directly from Open Exchange Rates API, ensuring precision and reliability in currency conversion.",
-    github: " https://github.com/FumiMelvinDev/flutter_currency_converter",
-  },
-];
-
-function Projects() {
+export default function Projects({
+  projects,
+}: {
+  projects: ProjectMetadata[];
+}) {
   return (
-    <div className="flex flex-col space-y-4">
-      <h2 className="text-custom-800">
-        Some of the noteworthy projects I have built:
-      </h2>
-      {projectslist.map((project) => (
-        <div key={project.title} className="">
-          <h3>{project.title}</h3>
-          <p className="body-2 text-custom-700">{project.description}</p>
-          <Link href={project.github} className="text-blue-500 hover:underline">
-            View on GitHub
+    <ul className="grid grid-cols-1 gap-8 sm:grid-cols-2">
+      {projects.map((project) => (
+        <li key={project.slug} className="group relative">
+          <Link href={`/projects/${project.slug}`}>
+            {project.image && (
+              <div className="h-72 w-full overflow-hidden bg-muted sm:h-60">
+                <Image
+                  src={project.image}
+                  alt={project.title || ""}
+                  fill
+                  className="rounded-lg object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                />
+              </div>
+            )}
+
+            <div className="absolute inset-[1px] rounded-lg bg-background/70 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+
+            <div className="absolute inset-x-0 bottom-0 translate-y-2 px-6 py-5 opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
+              <h2 className="title line-clamp-1 text-xl no-underline body-2 text-custom-700">
+                {project.title}
+              </h2>
+              <p className="line-clamp-1 text-sm text-muted-foreground">
+                {project.summary}
+              </p>
+              <p className="text-xs font-light text-muted-foreground">
+                {formatDate(project.publishedAt ?? "")}
+              </p>
+            </div>
           </Link>
-          {project.url && (
-            <Link href={project.url} className="text-blue-500 hover:underline">
-              View Live
-            </Link>
-          )}
-        </div>
+        </li>
       ))}
-    </div>
+    </ul>
   );
 }
-
-export default Projects;
