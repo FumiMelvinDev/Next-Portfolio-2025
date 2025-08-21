@@ -17,7 +17,8 @@ export async function generateStaticParams(): Promise<Params[]> {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const project = await getProjectBySlug(params.slug);
+  const awaitedParams = await params;
+  const project = await getProjectBySlug(awaitedParams.slug);
   if (!project) {
     return { title: "Project not found" };
   }
@@ -26,16 +27,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { title, image } = metadata;
 
   return {
-    title: title ?? params.slug,
+    title: title ?? awaitedParams.slug,
     openGraph: {
-      title: title ?? params.slug,
+      title: title ?? awaitedParams.slug,
       images: image ? [{ url: image }] : undefined,
     },
   };
 }
 
 export default async function Project({ params }: Props) {
-  const { slug } = params;
+  const awaitedParams = await params;
+  const { slug } = awaitedParams;
   const project = await getProjectBySlug(slug);
 
   if (!project) {

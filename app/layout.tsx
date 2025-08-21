@@ -32,7 +32,7 @@ export default function RootLayout({
         <main className="max-w-7xl px-10 md:px-20 lg:px-32">
           <ThemeProvider
             attribute="class"
-            defaultTheme="system"
+            defaultTheme="light"
             enableSystem
             disableTransitionOnChange
           >
