@@ -1,25 +1,40 @@
 import Link from "next/link";
 import Image from "next/image";
-import React from "react";
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 
 import { formatDate } from "@/lib/utils";
 import MDXContent from "@/components/mdx-content";
 import { ArrowLeftIcon } from "@radix-ui/react-icons";
 import { getProjectBySlug, getProjects } from "@/lib/projects";
-import { notFound } from "next/navigation";
 
-export async function generateStaticParams() {
+type Params = { slug: string };
+type Props = { params: Params };
+
+export async function generateStaticParams(): Promise<Params[]> {
   const projects = await getProjects();
   return projects.map((project) => ({ slug: project.slug }));
 }
 
-interface ProjectPageProps {
-  params: {
-    slug: string;
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const project = await getProjectBySlug(params.slug);
+  if (!project) {
+    return { title: "Project not found" };
+  }
+
+  const { metadata } = project;
+  const { title, image } = metadata;
+
+  return {
+    title: title ?? params.slug,
+    openGraph: {
+      title: title ?? params.slug,
+      images: image ? [{ url: image }] : undefined,
+    },
   };
 }
 
-export default async function Project({ params }: ProjectPageProps) {
+export default async function Project({ params }: Props) {
   const { slug } = params;
   const project = await getProjectBySlug(slug);
 
