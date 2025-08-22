@@ -7,6 +7,7 @@ import { formatDate } from "@/lib/utils";
 import MDXContent from "@/components/mdx-content";
 import { ArrowLeftIcon } from "@radix-ui/react-icons";
 import { getProjectBySlug, getProjects } from "@/lib/projects";
+import { CarouselDemo } from "@/components/carousel";
 
 type Params = { slug: string };
 type Props = { params: Params };
@@ -45,11 +46,11 @@ export default async function Project({ params }: Props) {
   }
 
   const { metadata, content } = project;
-  const { title, image, author, publishedAt } = metadata;
+  const { title, image, author, publishedAt, images } = metadata;
 
   return (
     <section className="pt-6">
-      <div className="container max-w-3xl">
+      <div className="container">
         <Link
           href="/projects"
           className="mb-8 inline-flex items-center gap-2 text-sm font-light text-muted-foreground transition-colors hover:text-foreground"
@@ -70,14 +71,20 @@ export default async function Project({ params }: Props) {
         )}
 
         <header>
-          <h1 className="title">{title}</h1>
+          <h1 className="text-custom-900">{title}</h1>
           <p className="mt-3 text-xs text-muted-foreground">
             {author} / {formatDate(publishedAt ?? "")}
           </p>
         </header>
-
-        <main className="prose mt-16 dark:prose-invert">
-          <MDXContent source={content} />
+        <main className="prose dark:prose-invert">
+          <section className="flex flex-col lg:flex-row justify-between gap-8 mt-16 w-full">
+            <div className="w-full lg:w-2/3 min-w-0">
+              <MDXContent source={content} />
+            </div>
+            <div className="w-full lg:w-1/3 min-w-0">
+              <CarouselDemo images={images ?? []} />
+            </div>
+          </section>
         </main>
       </div>
     </section>

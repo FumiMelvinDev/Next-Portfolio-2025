@@ -13,6 +13,7 @@ export type ProjectMetadata = {
   title?: string;
   summary?: string;
   image?: string;
+  images?: string[];
   author?: string;
   publishedAt?: string;
   slug: string;

@@ -1,4 +1,5 @@
 import * as React from "react";
+import Image from "next/image";
 
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -9,16 +10,25 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 
-export function CarouselDemo() {
+type CarouselDemoProps = {
+  images: string[];
+};
+
+export function CarouselDemo({ images }: CarouselDemoProps) {
   return (
     <Carousel className="w-full max-w-xs">
       <CarouselContent>
-        {Array.from({ length: 5 }).map((_, index) => (
+        {images.map((src, index) => (
           <CarouselItem key={index}>
-            <div className="p-1">
+            <div className="relative w-full h-[480px] p-1">
               <Card>
-                <CardContent className="flex aspect-square items-center justify-center p-6">
-                  <span className="text-4xl font-semibold">{index + 1}</span>
+                <CardContent className="flex items-center justify-center p-0 h-full w-full">
+                  <Image
+                    src={src}
+                    alt={`Project image ${index + 1}`}
+                    fill
+                    className="object-contain rounded"
+                  />
                 </CardContent>
               </Card>
             </div>
