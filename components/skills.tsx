@@ -25,6 +25,8 @@ function Skills() {
     { id: 14, name: "Git", icon: "git" },
     { id: 15, name: "Supabase", icon: "supabase" },
     { id: 16, name: "Firebase", icon: "firebase" },
+    { id: 17, name: "C#", icon: "csharp" },
+    { id: 18, name: "Blazor", icon: "blazor" },
   ];
 
   return (
