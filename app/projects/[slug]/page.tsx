@@ -8,6 +8,8 @@ import MDXContent from "@/components/mdx-content";
 import { ArrowLeftIcon } from "@radix-ui/react-icons";
 import { getProjectBySlug, getProjects } from "@/lib/projects";
 import { CarouselDemo } from "@/components/carousel";
+import { SITE } from "@/lib/site";
+import StructuredData from "@/components/structured-data";
 
 type Params = { slug: string };
 type Props = { params: Params };
@@ -25,13 +27,29 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   const { metadata } = project;
-  const { title, image } = metadata;
+  const { title, image, summary } = metadata;
+
+  const absoluteImage = image
+    ? new URL(image, SITE.url).toString()
+    : `${SITE.url}/og?title=${encodeURIComponent(title ?? awaitedParams.slug)}`;
 
   return {
     title: title ?? awaitedParams.slug,
+    description: summary ?? undefined,
     openGraph: {
       title: title ?? awaitedParams.slug,
-      images: image ? [{ url: image }] : undefined,
+      description: summary ?? undefined,
+      url: `${SITE.url}/projects/${awaitedParams.slug}`,
+      images: [{ url: absoluteImage }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: title ?? awaitedParams.slug,
+      description: summary ?? undefined,
+      images: [absoluteImage],
+    },
+    alternates: {
+      canonical: `${SITE.url}/projects/${awaitedParams.slug}`,
     },
   };
 }
@@ -63,12 +81,26 @@ export default async function Project({ params }: Props) {
           <div className="relative mb-6 h-96 w-full overflow-hidden rounded-lg">
             <Image
               src={image}
-              alt={title || ""}
+              alt={`${title} - project screenshot`}
               className="object-cover"
               fill
             />
           </div>
         )}
+
+        {/* JSON-LD Article schema for this project */}
+        <StructuredData
+          data={{
+            "@context": "https://schema.org",
+            "@type": "Article",
+            headline: title,
+            description: metadata.summary ?? undefined,
+            url: `${SITE.url}/projects/${slug}`,
+            author: { "@type": "Person", name: metadata.author ?? SITE.author },
+            datePublished: metadata.publishedAt ?? undefined,
+            image: image ? new URL(image, SITE.url).toString() : undefined,
+          }}
+        />
 
         <header>
           <h1 className="text-custom-900">{title}</h1>
